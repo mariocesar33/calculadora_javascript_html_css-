@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Calculadora JavaScript</title>
+</head>
+<body>
+    <div class="calculator">
+
+        <div class="horaData">
+            <span class="data" id="data" style="color: black; font-size: 12px; background: #fff; padding: 5px 5px"><strong>25/04/1987</strong></span>
+            <input id="hora-cons" type="time" name="hora-cons" value="13:30">
+        </div>
+
+        <input type="text" name="print" class="calculator-screen" value="0" disabled />
+      
+        <div class="calculator-keys" id="calculator-keys">
+            <button type="button" class="all-clear_AC" value="all-clear">AC</button>
+            <button type="button" class="all-clear_CE" value="all-clear">CE</button>
+            <button type="button" class="operatorPercentagem" value="%">&percnt;</button>
+            <button type="button" class="operatorDividir" value="/">&divide;</button>
+
+
+            <button type="button" value="7" class="buttons_7" id="btn_7">7</button>
+            <button type="button" value="8" class="buttons_8" id="btn_8">8</button>
+            <button type="button" value="9" class="buttons_9" id="btn-9">9</button>
+
+            <button type="button" class="operatorVezes" value="*">&times;</button>
+          
+            <button type="button" value="4" class="buttons_4" id="btn_4">4</button>
+            <button type="button" value="5" class="buttons_5" id="btn_5">5</button>
+            <button type="button" value="6" class="buttons_6" id="btn_6">6</button>
+      
+            <button type="button" class="operatorMenos" value="-">-</button>
+          
+            <button type="button" value="1" class="buttons_1" id="btn_1">1</button>
+            <button type="button" value="2" class="buttons_2" id="btn_2">2</button>
+            <button type="button" value="3" class="buttons_3" id="btn_3">3</button>
+            <button type="button" value="0" class="buttons_0" id="btn_0">0</button>
+
+            <button type="button" class="decimal" value=".">.</button>
+            <button type="button" class="operator-sign" value="+">+</button>
+            <button type="button" class="equal" value="=">=</button>
+        </div>
+      </div>
+    <script src="./script/controller/calcController.js"></script>  
+    <script src="./script/calculator.js"></script>
+</body>
+</html>
