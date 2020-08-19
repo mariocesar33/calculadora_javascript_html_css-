@@ -2,7 +2,7 @@ class CalcController {
 
     constructor() {
         this._operation = [];
-        this._locale = 'pt-br';
+        this._locale = 'pt';
         this._displayCalcEl = document.querySelector('input[type="text"]');
         this._dateEl = document.querySelector('#data');
         this._timeEl = document.querySelector('input[type="time"]');
@@ -19,6 +19,8 @@ class CalcController {
         setInterval( ()=> {
             this.setDisplayDateTime();
         }, 1000);
+
+        this.setLastNumberToDisplay();
     }
 
     addEventListenerAll(element, events, fn) {
@@ -28,11 +30,13 @@ class CalcController {
     }
 
     clearAll() {
-        this._operation = null;
+        this._operation = [];
+        this.setLastNumberToDisplay(); // mostrar na tela a operacão feita
     }
 
     clearEntry(){
         this._operation.pop();
+        this.setLastNumberToDisplay(); // mostrar na tela a operacão feita
     }
     /** verificar o ultimo elemento */
     getLastOperation() {
@@ -60,14 +64,27 @@ class CalcController {
     }
 
     calc(){
-        let last = this._operation.pop(); // tirar e guardar a ultima operacao
+        let last = '';
+
         // this._operation que tem toda a nossa operacao guardada. vamos calcula-lo
+        if (this._operation.length > 3) {
+            last = this._operation.pop(); // tirar e guardar a ultima operacao
+        }
+        
+        
+        let result = eval(this._operation.join("")); // a funcao 'eval()' é quem faz as operacões
 
         if (last == "%") { //verificar se ultimo é simbolo %
 
+            result /= 100;
+
+            this._operation = [result];
+            	
         } else {
-            let result = eval(this._operation.join("")); // a funcao 'eval()' é quem faz as operacões
-            this._operation = [result, last]; // atribuir novos valores ao array this._operation
+            
+            this._operation = [result]; // atribuir novos valores ao array this._operation
+            
+            if (last) this._operation.push(last);
         }
         this.setLastNumberToDisplay(); // mostrar na tela a operacão feita
     }
@@ -81,6 +98,9 @@ class CalcController {
             break; // tendo o numero na minha variavel, mando parar o for...
             }
         }
+
+        if (!lastNumber) lastNumber = 0;
+
         // para colocar esse ultimo numero na tela, é basta chamar o objecto this.displayCalc e colocar igual ao lasNumber
         this.displayCalc = lastNumber;
     }
@@ -144,7 +164,7 @@ class CalcController {
                 this.addOperation('.');
                 break;
             case '=':
-
+                this.calc();
                 break;
 
             case '0':
