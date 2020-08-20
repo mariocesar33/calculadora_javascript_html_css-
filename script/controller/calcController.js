@@ -1,6 +1,10 @@
 class CalcController {
 
     constructor() {
+
+        this._lastOperator = '';
+        this._lastNumber = '';
+
         this._operation = [];
         this._locale = 'pt';
         this._displayCalcEl = document.querySelector('input[type="text"]');
@@ -63,16 +67,33 @@ class CalcController {
         }
     }
 
+    getResult () {
+
+        return eval(this._operation.join(""));
+    }
+
+    // this._operation que tem toda a nossa operacao guardada. vamos calcula-lo
     calc(){
         let last = '';
+        this._lastOperator = this.getLastItem();
 
-        // this._operation que tem toda a nossa operacao guardada. vamos calcula-lo
+        if (this._operation.length < 3) {
+
+            let firstItem = this._operation[0];
+            this._operation = [firstItem, this._lastOperator, this._lastNumber];
+        }
+
         if (this._operation.length > 3) {
             last = this._operation.pop(); // tirar e guardar a ultima operacao
+
+            this._lastNumber = this.getResult();
+
+        } else if (this._operation.length == 3) {
+
+            this._lastNumber = this.getLastItem(false);
         }
         
-        
-        let result = eval(this._operation.join("")); // a funcao 'eval()' é quem faz as operacões
+        let result = this.getResult(); // a funcao 'eval()' é quem faz as operacões
 
         if (last == "%") { //verificar se ultimo é simbolo %
 
@@ -89,15 +110,26 @@ class CalcController {
         this.setLastNumberToDisplay(); // mostrar na tela a operacão feita
     }
 
-    setLastNumberToDisplay() { // o metodo usado para mostrar o ultimo numero no display
-        let lastNumber;
+    getLastItem(isOperator = true) { // metodo que vai pegar por patrão o ultimo operador
+        let lastItem;
 
         for(let i = this._operation.length - 1; i >= 0; i--) {
-            if(!this.isOperator(this._operation[i])){ //perguntar se o que esta dentro do this._operation[i], se não é um "operador", se não é um operador então já encontrei um numero.
-            lastNumber = this._operation[i];// se o i não for um operador quer dizer que ja encotrei um numero, e vou colocar o numero na minha variavel
-            break; // tendo o numero na minha variavel, mando parar o for...
-            }
+
+            if(this.isOperator(this._operation[i]) == isOperator) { // o resultado do metodo isOperation tem de ser igual ao parametro
+                lastItem = this._operation[i]; // se o i for um operator quer dizer que ja encotrei um Operator, e vou colocar o operator na minha variavel
+                break;
+            }            
         }
+
+        if (!lastItem) {
+            lastItem = (isOperator) ? this._lastOperator : this._lastNumber;
+        }
+
+        return lastItem;
+    }
+
+    setLastNumberToDisplay() { // o metodo que vai mostrar o ultimo numero no display
+        let lastNumber = this.getLastItem(false);
 
         if (!lastNumber) lastNumber = 0;
 
@@ -130,7 +162,7 @@ class CalcController {
                 this.setLastNumberToDisplay(); // mostra o ultimo numero no display
             }
         }
-        console.log(this._operation)
+        console.log(this._operation);
     }
 
     setError() {
