@@ -4,6 +4,8 @@ class CalcController {
 
         this._lastOperator = '';
         this._lastNumber = '';
+        this._audio = new Audio('click.mp3');
+        this._audioOnOff = false;
 
         this._operation = [];
         this._locale = 'pt';
@@ -30,12 +32,31 @@ class CalcController {
         }, 1000);
 
         this.setLastNumberToDisplay();
+
+        document.querySelectorAll('.all-clear_AC').forEach(btn => {
+            btn.addEventListener('dblclick', e => {
+                this.toggleAudio(); 
+            });
+        });
+    }
+
+    toggleAudio() { // metodo que vai controlar o atribudo para saber se o audio esta ligado ao não
+        this._audioOnOff = (this._audioOnOff) ? false : true;
+    }
+
+    playAudio() { // metodo que toca o som
+        if (this._audioOnOff) {
+
+            this._audio.currentTime = 0;
+            this._audio.play();
+        }
     }
 
     // capturar evento de teclado
     initKeyboard() {
         document.addEventListener('keyup', e=> {
-            console.log(e.key);
+
+            this.playAudio();
 
             switch(e.key) {
                 case 'Escape':
@@ -235,6 +256,9 @@ class CalcController {
     }
 
     execBtn(value) {
+
+        this.playAudio(); //toda vez que qualquer botão é precionado "toca som"
+
         switch(value) {
             case 'ac':
                 this.clearAll();
@@ -329,6 +353,12 @@ class CalcController {
     }
 
     set displayCalc(value) {
+
+        if (value.toString().length > 10) {
+            this.setError();
+            return false;
+        }
+
         this._displayCalcEl.value = value;
     }
 
