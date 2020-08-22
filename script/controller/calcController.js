@@ -141,7 +141,14 @@ class CalcController {
     }
 
     getResult () {
-        return eval(this._operation.join(""));
+
+        try {
+            return eval(this._operation.join(""));
+        } catch(e) {
+            setTimeout(() => {
+                this.setError();
+            }, 1);    
+        }
     }
 
     // this._operation que tem toda a nossa operacao guardada. vamos calcula-lo
